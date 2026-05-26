@@ -1538,3 +1538,40 @@ create policy job_components_tenant_delete on public.job_components
       '00000000-0000-0000-0000-000000000001'::uuid
     )
   );
+
+
+-- =============================================================================
+-- GRANTS
+-- Expose tables to PostgREST for authenticated users and service_role
+-- =============================================================================
+grant select, insert, update, delete on public.tenants to authenticated;
+grant select, insert, update, delete on public.tenants to service_role;
+grant select, insert, update, delete on public.job_statuses to authenticated;
+grant select, insert, update, delete on public.job_statuses to service_role;
+grant select, insert, update, delete on public.job_types to authenticated;
+grant select, insert, update, delete on public.job_types to service_role;
+grant select, insert, update, delete on public.risk_tiers to authenticated;
+grant select, insert, update, delete on public.risk_tiers to service_role;
+grant select, insert, update, delete on public.disciplines to authenticated;
+grant select, insert, update, delete on public.disciplines to service_role;
+grant select, insert, update, delete on public.office_locations to authenticated;
+grant select, insert, update, delete on public.office_locations to service_role;
+grant select, insert, update, delete on public.staff to authenticated;
+grant select, insert, update, delete on public.staff to service_role;
+grant select, insert, update, delete on public.clients to authenticated;
+grant select, insert, update, delete on public.clients to service_role;
+grant select, insert, update, delete on public.client_contacts to authenticated;
+grant select, insert, update, delete on public.client_contacts to service_role;
+grant select, insert, update, delete on public.jobs to authenticated;
+grant select, insert, update, delete on public.jobs to service_role;
+grant select, insert, update, delete on public.job_offices to authenticated;
+grant select, insert, update, delete on public.job_offices to service_role;
+grant select, insert, update, delete on public.job_disciplines to authenticated;
+grant select, insert, update, delete on public.job_disciplines to service_role;
+grant select, insert, update, delete on public.job_phases to authenticated;
+grant select, insert, update, delete on public.job_phases to service_role;
+grant select, insert, update, delete on public.job_scopes to authenticated;
+grant select, insert, update, delete on public.job_scopes to service_role;
+grant select, insert, update, delete on public.job_components to authenticated;
+grant select, insert, update, delete on public.job_components to service_role;
+
