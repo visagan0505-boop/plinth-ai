@@ -14,13 +14,13 @@ export const TenantOnboardingSchema = z.object({
   disciplineName: z.string().min(3, "Discipline name must be at least 3 characters").max(100),
   
   // Operational Staff Info
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
-  jobTitle: z.string().min(1, "Job title is required"),
+  fullName: z.string().min(1, "Full name is required"),
+  email: z.string().email("Valid email is required"),
+  role: z.enum(['director', 'project_director', 'design_manager', 'senior_engineer', 'engineer', 'graduate', 'drafter', 'admin', 'finance']),
   
   // Temporal/Financial
-  costRate: z.number().min(0, "Cost rate cannot be negative"),
-  billRate: z.number().min(0, "Bill rate cannot be negative"),
+  hourlyCostRate: z.number().min(0, "Cost rate cannot be negative"),
+  hourlyBillRate: z.number().min(0, "Bill rate cannot be negative"),
 });
 
 export type TenantOnboardingDTO = z.infer<typeof TenantOnboardingSchema>;
