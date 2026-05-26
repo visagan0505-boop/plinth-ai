@@ -31,25 +31,25 @@ BEGIN
   -- ---------------------------------------------------------------------------
   -- 2. Minimal Lookups (Required for Staff FK integrity)
   -- ---------------------------------------------------------------------------
-  INSERT INTO public.office_locations (id, tenant_id, code, name, country_code, timezone)
-  VALUES (v_office_id, v_tenant_id, 'VAL', 'Validation Office', 'NZ', 'Pacific/Auckland')
+  INSERT INTO public.office_locations (id, tenant_id, code, name, country_code, timezone, sort_order)
+  VALUES (v_office_id, v_tenant_id, 'VAL', 'Validation Office', 'NZ', 'Pacific/Auckland', 1)
   ON CONFLICT (id) DO NOTHING;
 
-  INSERT INTO public.disciplines (id, tenant_id, code, name, is_billable)
-  VALUES (v_disc_id, v_tenant_id, 'VAL', 'Validation Discipline', true)
+  INSERT INTO public.disciplines (id, tenant_id, code, name, sort_order, default_hourly_rate)
+  VALUES (v_disc_id, v_tenant_id, 'VAL', 'Validation Discipline', 1, 250.00)
   ON CONFLICT (id) DO NOTHING;
 
   -- ---------------------------------------------------------------------------
   -- 3. Staff Fixture (Proves cross-table composite constraints)
   -- ---------------------------------------------------------------------------
   INSERT INTO public.staff (
-    id, tenant_id, email, first_name, last_name, role, 
+    id, tenant_id, email, full_name, role, 
     primary_office_id, primary_discipline_id, 
     hourly_cost_rate, hourly_bill_rate, 
     created_by, updated_by
   )
   VALUES (
-    v_staff_id, v_tenant_id, 'validation.admin@example.com', 'Validation', 'Admin', 'admin', 
+    v_staff_id, v_tenant_id, 'validation.admin@example.com', 'Validation Admin', 'admin', 
     v_office_id, v_disc_id, 
     50, 150, 
     v_staff_id, v_staff_id

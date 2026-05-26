@@ -1,0 +1,426 @@
+node.exe : Initialising login role...
+At line:1 char:1
++ & "C:\Users\visagang\AppData\Local\Microsoft\WinGet\Packages\OpenJS.N ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Initialising login role...:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+Do you want to reset the remote database? [y/N] y
+Resetting remote database...
+NOTICE (00000): dropping extension: citext
+NOTICE (00000): drop cascades to 2 other objects
+NOTICE (00000): dropping extension: btree_gist
+NOTICE (00000): drop cascades to constraint staff_rate_periods_no_overlap on table staff_rate_periods
+NOTICE (00000): dropping function: public.set_updated_at
+NOTICE (00000): drop cascades to 17 other objects
+NOTICE (00000): dropping function: public.set_default_job_status
+NOTICE (00000): drop cascades to trigger trg_jobs_default_status on table jobs
+NOTICE (00000): dropping function: public.current_tenant_id
+NOTICE (00000): drop cascades to 89 other objects
+NOTICE (00000): dropping function: public.generate_next_sequence
+NOTICE (00000): dropping table: public.tenant_sequences
+NOTICE (00000): dropping table: public.job_types
+NOTICE (00000): drop cascades to constraint fk_jobs_type on table jobs
+NOTICE (00000): dropping table: public.tenants
+NOTICE (00000): dropping table: public.risk_tiers
+NOTICE (00000): drop cascades to constraint fk_jobs_risk_tier on table jobs
+NOTICE (00000): dropping table: public.domain_events_2026
+NOTICE (00000): dropping table: public.disciplines
+NOTICE (00000): drop cascades to 2 other objects
+NOTICE (00000): dropping table: public.job_statuses
+NOTICE (00000): drop cascades to constraint fk_jobs_status on table jobs
+NOTICE (00000): dropping table: public.staff_rate_periods
+NOTICE (00000): dropping table: public.office_locations
+NOTICE (00000): drop cascades to 3 other objects
+NOTICE (00000): dropping table: public.staff
+NOTICE (00000): drop cascades to 14 other objects
+NOTICE (00000): dropping table: public.clients
+NOTICE (00000): drop cascades to 2 other objects
+NOTICE (00000): dropping table: public.client_contacts
+NOTICE (00000): dropping table: public.jobs
+NOTICE (00000): drop cascades to 3 other objects
+NOTICE (00000): dropping table: public.job_offices
+NOTICE (00000): dropping table: public.job_disciplines
+NOTICE (00000): dropping table: public.job_phases
+NOTICE (00000): drop cascades to constraint fk_js_phase on table job_scopes
+NOTICE (00000): dropping table: public.job_scopes
+NOTICE (00000): drop cascades to constraint fk_jc_scope on table job_components
+NOTICE (00000): dropping table: public.job_components
+NOTICE (00000): dropping table: public.domain_events
+NOTICE (00000): dropping table: public.job_phases_pkey
+NOTICE (00000): table "job_phases_pkey" does not exist, skipping
+NOTICE (00000): dropping table: public.job_scopes_pkey
+NOTICE (00000): table "job_scopes_pkey" does not exist, skipping
+NOTICE (00000): dropping table: public.job_components_pkey
+NOTICE (00000): table "job_components_pkey" does not exist, skipping
+NOTICE (00000): dropping table: public.idx_staff_primary_discipline
+NOTICE (00000): table "idx_staff_primary_discipline" does not exist, skipping
+NOTICE (00000): dropping table: public.idx_staff_primary_office
+NOTICE (00000): table "idx_staff_primary_office" does not exist, skipping
+NOTICE (00000): dropping table: public.idx_staff_manager
+NOTICE (00000): table "idx_staff_manager" does not exist, skipping
+NOTICE (00000): dropping table: public.idx_staff_created_by
+NOTICE (00000): table "idx_staff_created_by" does not exist, skipping
+NOTICE (00000): dropping table: public.idx_staff_updated_by
+NOTICE (00000): table "idx_staff_updated_by" does not exist, skipping
+NOTICE (00000): dropping table: public.idx_staff_auth_user
+NOTICE (00000): table "idx_staff_auth_user" does not exist, skipping
+NOTICE (00000): dropping table: public.idx_clients_tenant
+NOTICE (00000): table "idx_clients_tenant" does not exist, skipping
+NOTICE (00000): dropping table: public.idx_clients_created_by
+NOTICE (00000): table "idx_clients_created_by" does not exist, skipping
+NOTICE (00000): dropping table: public.idx_clients_updated_by
+NOTICE (00000): table "idx_clients_updated_by" does not exist, skipping
+NOTICE (00000): dropping table: public.idx_client_contacts_tenant
+NOTICE (00000): table "idx_client_contacts_tenant" does not exist, skipping
+NOTICE (00000): dropping table: public.idx_client_contacts_client
+NOTICE (00000): table "idx_client_contacts_client" does not exist, skipping
+NOTICE (00000): dropping table: public.idx_client_contacts_created_by
+NOTICE (00000): table "idx_client_contacts_created_by" does not exist, skipping
+NOTICE (00000): dropping table: public.idx_client_contacts_updated_by
+NOTICE (00000): table "idx_client_contacts_updated_by" does not exist, skipping
+NOTICE (00000): dropping table: public.idx_client_contacts_one_primary
+NOTICE (00000): table "idx_client_contacts_one_primary" does not exist, skipping
+NOTICE (00000): dropping table: public.idx_jobs_tenant_status
+NOTICE (00000): table "idx_jobs_tenant_status" does not exist, skipping
+NOTICE (00000): dropping table: public.idx_jobs_client
+NOTICE (00000): table "idx_jobs_client" does not exist, skipping
+NOTICE (00000): dropping table: public.idx_jobs_job_type
+NOTICE (00000): table "idx_jobs_job_type" does not exist, skipping
+NOTICE (00000): dropping table: public.idx_jobs_risk_tier
+NOTICE (00000): table "idx_jobs_risk_tier" does not exist, skipping
+NOTICE (00000): dropping table: public.idx_jobs_project_director
+NOTICE (00000): table "idx_jobs_project_director" does not exist, skipping
+NOTICE (00000): dropping table: public.idx_jobs_design_manager
+NOTICE (00000): table "idx_jobs_design_manager" does not exist, skipping
+NOTICE (00000): dropping table: public.idx_jobs_primary_office
+NOTICE (00000): table "idx_jobs_primary_office" does not exist, skipping
+NOTICE (00000): dropping table: public.idx_jobs_created_by
+NOTICE (00000): table "idx_jobs_created_by" does not exist, skipping
+NOTICE (00000): dropping table: public.idx_jobs_updated_by
+NOTICE (00000): table "idx_jobs_updated_by" does not exist, skipping
+NOTICE (00000): dropping table: public.idx_job_offices_tenant
+NOTICE (00000): table "idx_job_offices_tenant" does not exist, skipping
+NOTICE (00000): dropping table: public.idx_job_offices_office
+NOTICE (00000): table "idx_job_offices_office" does not exist, skipping
+NOTICE (00000): dropping table: public.idx_job_disciplines_tenant
+NOTICE (00000): table "idx_job_disciplines_tenant" does not exist, skipping
+NOTICE (00000): dropping table: public.idx_job_disciplines_discipline
+NOTICE (00000): table "idx_job_disciplines_discipline" does not exist, skipping
+NOTICE (00000): dropping table: public.idx_job_phases_tenant
+NOTICE (00000): table "idx_job_phases_tenant" does not exist, skipping
+NOTICE (00000): dropping table: public.idx_job_phases_job
+NOTICE (00000): table "idx_job_phases_job" does not exist, skipping
+NOTICE (00000): dropping table: public.idx_job_phases_created_by
+NOTICE (00000): table "idx_job_phases_created_by" does not exist, skipping
+NOTICE (00000): dropping table: public.idx_job_phases_updated_by
+NOTICE (00000): table "idx_job_phases_updated_by" does not exist, skipping
+NOTICE (00000): dropping table: public.idx_job_scopes_tenant
+NOTICE (00000): table "idx_job_scopes_tenant" does not exist, skipping
+NOTICE (00000): dropping table: public.idx_job_scopes_phase
+NOTICE (00000): table "idx_job_scopes_phase" does not exist, skipping
+NOTICE (00000): dropping table: public.idx_job_scopes_created_by
+NOTICE (00000): table "idx_job_scopes_created_by" does not exist, skipping
+NOTICE (00000): dropping table: public.idx_job_scopes_updated_by
+NOTICE (00000): table "idx_job_scopes_updated_by" does not exist, skipping
+NOTICE (00000): dropping table: public.idx_job_components_tenant
+NOTICE (00000): table "idx_job_components_tenant" does not exist, skipping
+NOTICE (00000): dropping table: public.idx_job_components_scope
+NOTICE (00000): table "idx_job_components_scope" does not exist, skipping
+NOTICE (00000): dropping table: public.idx_job_components_created_by
+NOTICE (00000): table "idx_job_components_created_by" does not exist, skipping
+NOTICE (00000): dropping table: public.idx_job_components_updated_by
+NOTICE (00000): table "idx_job_components_updated_by" does not exist, skipping
+NOTICE (00000): dropping table: public.domain_events_2026_tenant_id_entity_type_entity_id_idx
+NOTICE (00000): table "domain_events_2026_tenant_id_entity_type_entity_id_idx" does not exist, skipping
+NOTICE (00000): dropping table: public.domain_events_2026_tenant_id_event_type_occurred_at_idx
+NOTICE (00000): table "domain_events_2026_tenant_id_event_type_occurred_at_idx" does not exist, skipping
+NOTICE (00000): dropping table: public.domain_events_2026_tenant_id_actor_id_idx
+NOTICE (00000): table "domain_events_2026_tenant_id_actor_id_idx" does not exist, skipping
+NOTICE (00000): dropping table: public.uq_job_statuses_tid_id
+NOTICE (00000): table "uq_job_statuses_tid_id" does not exist, skipping
+NOTICE (00000): dropping table: public.uq_job_types_tid_id
+NOTICE (00000): table "uq_job_types_tid_id" does not exist, skipping
+NOTICE (00000): dropping table: public.uq_risk_tiers_tid_id
+NOTICE (00000): table "uq_risk_tiers_tid_id" does not exist, skipping
+NOTICE (00000): dropping table: public.uq_disciplines_tid_id
+NOTICE (00000): table "uq_disciplines_tid_id" does not exist, skipping
+NOTICE (00000): dropping table: public.uq_office_locations_tid_id
+NOTICE (00000): table "uq_office_locations_tid_id" does not exist, skipping
+NOTICE (00000): dropping table: public.uq_staff_tid_id
+NOTICE (00000): table "uq_staff_tid_id" does not exist, skipping
+NOTICE (00000): dropping table: public.uq_clients_tid_id
+NOTICE (00000): table "uq_clients_tid_id" does not exist, skipping
+NOTICE (00000): dropping table: public.uq_client_contacts_tid_id
+NOTICE (00000): table "uq_client_contacts_tid_id" does not exist, skipping
+NOTICE (00000): dropping table: public.uq_jobs_tid_id
+NOTICE (00000): table "uq_jobs_tid_id" does not exist, skipping
+NOTICE (00000): dropping table: public.uq_job_phases_tid_id
+NOTICE (00000): table "uq_job_phases_tid_id" does not exist, skipping
+NOTICE (00000): dropping table: public.uq_job_scopes_tid_id
+NOTICE (00000): table "uq_job_scopes_tid_id" does not exist, skipping
+NOTICE (00000): dropping table: public.uq_job_components_tid_id
+NOTICE (00000): table "uq_job_components_tid_id" does not exist, skipping
+NOTICE (00000): dropping table: public.staff_rate_periods_pkey
+NOTICE (00000): table "staff_rate_periods_pkey" does not exist, skipping
+NOTICE (00000): dropping table: public.uq_srp_tid_id
+NOTICE (00000): table "uq_srp_tid_id" does not exist, skipping
+NOTICE (00000): dropping table: public.idx_srp_tenant
+NOTICE (00000): table "idx_srp_tenant" does not exist, skipping
+NOTICE (00000): dropping table: public.tenant_sequences_pkey
+NOTICE (00000): table "tenant_sequences_pkey" does not exist, skipping
+NOTICE (00000): dropping table: public.idx_srp_staff_date
+NOTICE (00000): table "idx_srp_staff_date" does not exist, skipping
+NOTICE (00000): dropping table: public.tenants_slug_key
+NOTICE (00000): table "tenants_slug_key" does not exist, skipping
+NOTICE (00000): dropping table: public.job_statuses_pkey
+NOTICE (00000): table "job_statuses_pkey" does not exist, skipping
+NOTICE (00000): dropping table: public.uq_job_statuses_tenant_code
+NOTICE (00000): table "uq_job_statuses_tenant_code" does not exist, skipping
+NOTICE (00000): dropping table: public.job_types_pkey
+NOTICE (00000): table "job_types_pkey" does not exist, skipping
+NOTICE (00000): dropping table: public.uq_job_types_tenant_code
+NOTICE (00000): table "uq_job_types_tenant_code" does not exist, skipping
+NOTICE (00000): dropping table: public.risk_tiers_pkey
+NOTICE (00000): table "risk_tiers_pkey" does not exist, skipping
+NOTICE (00000): dropping table: public.uq_risk_tiers_tenant_code
+NOTICE (00000): table "uq_risk_tiers_tenant_code" does not exist, skipping
+NOTICE (00000): dropping table: public.disciplines_pkey
+NOTICE (00000): table "disciplines_pkey" does not exist, skipping
+NOTICE (00000): dropping table: public.uq_disciplines_tenant_code
+NOTICE (00000): table "uq_disciplines_tenant_code" does not exist, skipping
+NOTICE (00000): dropping table: public.office_locations_pkey
+NOTICE (00000): table "office_locations_pkey" does not exist, skipping
+NOTICE (00000): dropping table: public.uq_office_locations_tenant_code
+NOTICE (00000): table "uq_office_locations_tenant_code" does not exist, skipping
+NOTICE (00000): dropping table: public.staff_pkey
+NOTICE (00000): table "staff_pkey" does not exist, skipping
+NOTICE (00000): dropping table: public.clients_pkey
+NOTICE (00000): table "clients_pkey" does not exist, skipping
+NOTICE (00000): dropping table: public.client_contacts_pkey
+NOTICE (00000): table "client_contacts_pkey" does not exist, skipping
+NOTICE (00000): dropping table: public.jobs_pkey
+NOTICE (00000): table "jobs_pkey" does not exist, skipping
+NOTICE (00000): dropping table: public.uq_jobs_tenant_job_number
+NOTICE (00000): table "uq_jobs_tenant_job_number" does not exist, skipping
+NOTICE (00000): dropping table: public.job_offices_pkey
+NOTICE (00000): table "job_offices_pkey" does not exist, skipping
+NOTICE (00000): dropping table: public.job_disciplines_pkey
+NOTICE (00000): table "job_disciplines_pkey" does not exist, skipping
+NOTICE (00000): dropping table: public.domain_events_2026_pkey
+NOTICE (00000): table "domain_events_2026_pkey" does not exist, skipping
+NOTICE (00000): dropping table: public.idx_srp_staff
+NOTICE (00000): table "idx_srp_staff" does not exist, skipping
+NOTICE (00000): dropping table: public.tenants_pkey
+NOTICE (00000): table "tenants_pkey" does not exist, skipping
+NOTICE (00000): dropping table: public.idx_events_tenant_type
+NOTICE (00000): table "idx_events_tenant_type" does not exist, skipping
+NOTICE (00000): dropping table: public.idx_events_tenant_actor
+NOTICE (00000): table "idx_events_tenant_actor" does not exist, skipping
+NOTICE (00000): dropping table: public.idx_events_tenant_entity
+NOTICE (00000): table "idx_events_tenant_entity" does not exist, skipping
+NOTICE (00000): dropping table: public.domain_events_pkey
+NOTICE (00000): table "domain_events_pkey" does not exist, skipping
+NOTICE (00000): truncating table: auth.saml_relay_states
+NOTICE (00000): truncating table: auth.sso_domains
+NOTICE (00000): truncating table: auth.oauth_consents
+NOTICE (00000): truncating table: auth.webauthn_credentials
+NOTICE (00000): truncating table: auth.sso_providers
+NOTICE (00000): truncate cascades to table "sso_domains"
+NOTICE (00000): truncate cascades to table "saml_providers"
+NOTICE (00000): truncate cascades to table "saml_relay_states"
+NOTICE (00000): truncating table: auth.mfa_amr_claims
+NOTICE (00000): truncating table: auth.users
+NOTICE (00000): truncate cascades to table "identities"
+NOTICE (00000): truncate cascades to table "sessions"
+NOTICE (00000): truncate cascades to table "mfa_factors"
+NOTICE (00000): truncate cascades to table "one_time_tokens"
+NOTICE (00000): truncate cascades to table "oauth_authorizations"
+NOTICE (00000): truncate cascades to table "oauth_consents"
+NOTICE (00000): truncate cascades to table "webauthn_credentials"
+NOTICE (00000): truncate cascades to table "webauthn_challenges"
+NOTICE (00000): truncate cascades to table "refresh_tokens"
+NOTICE (00000): truncate cascades to table "mfa_challenges"
+NOTICE (00000): truncate cascades to table "mfa_amr_claims"
+NOTICE (00000): truncating table: auth.identities
+NOTICE (00000): truncating table: auth.oauth_client_states
+NOTICE (00000): truncating table: auth.oauth_authorizations
+NOTICE (00000): truncating table: auth.saml_providers
+NOTICE (00000): truncating table: auth.mfa_factors
+NOTICE (00000): truncate cascades to table "mfa_challenges"
+NOTICE (00000): truncating table: auth.sessions
+NOTICE (00000): truncate cascades to table "refresh_tokens"
+NOTICE (00000): truncate cascades to table "mfa_amr_claims"
+NOTICE (00000): truncating table: auth.webauthn_challenges
+NOTICE (00000): truncating table: auth.refresh_tokens
+NOTICE (00000): truncating table: auth.one_time_tokens
+NOTICE (00000): truncating table: auth.mfa_challenges
+NOTICE (00000): truncating table: auth.audit_log_entries
+NOTICE (00000): truncating table: auth.flow_state
+NOTICE (00000): truncate cascades to table "saml_relay_states"
+NOTICE (00000): truncating table: supabase_migrations.schema_migrations
+NOTICE (00000): truncating table: auth.oauth_clients
+NOTICE (00000): truncate cascades to table "sessions"
+NOTICE (00000): truncate cascades to table "oauth_authorizations"
+NOTICE (00000): truncate cascades to table "oauth_consents"
+NOTICE (00000): truncate cascades to table "refresh_tokens"
+NOTICE (00000): truncate cascades to table "mfa_amr_claims"
+NOTICE (00000): truncating table: auth.instances
+NOTICE (00000): truncating table: auth.custom_oauth_providers
+Applying migration 00000000000001_initial_schema.sql...
+NOTICE (42710): extension "pgcrypto" already exists, skipping
+Applying migration 00000000000002_seed_lookups.sql...
+Applying migration 00000000000003_tenant_infrastructure.sql...
+Applying migration 00000000000004_composite_fks.sql...
+Applying migration 00000000000005_intelligence_tables.sql...
+Applying migration 00000000000006_rls_centralization.sql...
+Applying migration 00000000000007_seed_updates.sql...
+ERROR: null value in column "sort_order" of relation "office_locations" violates not-null constraint (SQLSTATE 23502)  
+                                                                                                      
+Failing row contains (33333333-3333-3333-3333-333333333333, 11111111-1111-1111-1111-111111111111, 2026-05-26 
+21:45:55.776848+00, 2026-05-26 21:45:55.776848+00, VAL, Validation Office, null, NZ, Pacific/Auckland, null, t).
+At statement: 1                                                                                                        
+                                                                                                      
+DO $$                                                                                                                  
+                                                                                                      
+DECLARE                                                                                                                
+                                                                                                      
+  v_tenant_id uuid := '11111111-1111-1111-1111-111111111111'::uuid;                                                    
+                                                                                                      
+  v_office_id uuid := '33333333-3333-3333-3333-333333333333'::uuid;                                                    
+                                                                                                      
+  v_disc_id   uuid := '44444444-4444-4444-4444-444444444444'::uuid;                                                    
+                                                                                                      
+  v_staff_id  uuid := '22222222-2222-2222-2222-222222222222'::uuid;                                                    
+                                                                                                      
+BEGIN                                                                                                                  
+                                                                                                      
+  -- ---------------------------------------------------------------------------                                       
+                                                                                                      
+  -- 1. Validation Tenant (Proves RLS & Composite FK isolation)                                                        
+                                                                                                      
+  -- ---------------------------------------------------------------------------                                       
+                                                                                                      
+  INSERT INTO public.tenants (id, tenant_id, name, slug, country_code, timezone, currency_code)                        
+                                                                                                      
+  VALUES (v_tenant_id, v_tenant_id, 'Validation Tenant', 'validation-tenant', 'NZ', 'Pacific/Auckland', 'NZD')         
+                                                                                                      
+  ON CONFLICT (id) DO NOTHING;                                                                                         
+                                                                                                      
+                                                                                                                       
+                                                                                                      
+  -- ---------------------------------------------------------------------------                                       
+                                                                                                      
+  -- 2. Minimal Lookups (Required for Staff FK integrity)                                                              
+                                                                                                      
+  -- ---------------------------------------------------------------------------                                       
+                                                                                                      
+  INSERT INTO public.office_locations (id, tenant_id, code, name, country_code, timezone)                              
+                                                                                                      
+  VALUES (v_office_id, v_tenant_id, 'VAL', 'Validation Office', 'NZ', 'Pacific/Auckland')                              
+                                                                                                      
+  ON CONFLICT (id) DO NOTHING;                                                                                         
+                                                                                                      
+                                                                                                                       
+                                                                                                      
+  INSERT INTO public.disciplines (id, tenant_id, code, name, is_billable)                                              
+                                                                                                      
+  VALUES (v_disc_id, v_tenant_id, 'VAL', 'Validation Discipline', true)                                                
+                                                                                                      
+  ON CONFLICT (id) DO NOTHING;                                                                                         
+                                                                                                      
+                                                                                                                       
+                                                                                                      
+  -- ---------------------------------------------------------------------------                                       
+                                                                                                      
+  -- 3. Staff Fixture (Proves cross-table composite constraints)                                                       
+                                                                                                      
+  -- ---------------------------------------------------------------------------                                       
+                                                                                                      
+  INSERT INTO public.staff (                                                                                           
+                                                                                                      
+    id, tenant_id, email, first_name, last_name, role,                                                                 
+                                                                                                      
+    primary_office_id, primary_discipline_id,                                                                          
+                                                                                                      
+    hourly_cost_rate, hourly_bill_rate,                                                                                
+                                                                                                      
+    created_by, updated_by                                                                                             
+                                                                                                      
+  )                                                                                                                    
+                                                                                                      
+  VALUES (                                                                                                             
+                                                                                                      
+    v_staff_id, v_tenant_id, 'validation.admin@example.com', 'Validation', 'Admin', 'admin',                           
+                                                                                                      
+    v_office_id, v_disc_id,                                                                                            
+                                                                                                      
+    50, 150,                                                                                                           
+                                                                                                      
+    v_staff_id, v_staff_id                                                                                             
+                                                                                                      
+  )                                                                                                                    
+                                                                                                      
+  ON CONFLICT (id) DO NOTHING;                                                                                         
+                                                                                                      
+                                                                                                                       
+                                                                                                      
+  -- ---------------------------------------------------------------------------                                       
+                                                                                                      
+  -- 4. Rate Period Validation (Proves GIST exclusion constraint acceptance)                                           
+                                                                                                      
+  -- ---------------------------------------------------------------------------                                       
+                                                                                                      
+  INSERT INTO public.staff_rate_periods (                                                                              
+                                                                                                      
+    tenant_id, staff_id, effective_from, effective_to, hourly_cost_rate, hourly_bill_rate, created_by, updated_by      
+                                                                                                      
+  )                                                                                                                    
+                                                                                                      
+  VALUES (                                                                                                             
+                                                                                                      
+    v_tenant_id, v_staff_id, '2026-01-01', null, 50, 150, v_staff_id, v_staff_id                                       
+                                                                                                      
+  )                                                                                                                    
+                                                                                                      
+  ON CONFLICT DO NOTHING;                                                                                              
+                                                                                                      
+                                                                                                                       
+                                                                                                      
+  -- ---------------------------------------------------------------------------                                       
+                                                                                                      
+  -- 5. Sequence Validation (Proves advisory lock execution path)                                                      
+                                                                                                      
+  -- ---------------------------------------------------------------------------                                       
+                                                                                                      
+  -- We execute the function purely to ensure it doesn't throw and successfully                                        
+                                                                                                      
+  -- writes the initial row into `tenant_sequences`.                                                                   
+                                                                                                      
+  PERFORM public.generate_next_sequence(v_tenant_id, 'validation_entity', extract(year from current_date)::int);       
+                                                                                                      
+                                                                                                                       
+                                                                                                      
+  -- ---------------------------------------------------------------------------                                       
+                                                                                                      
+  -- 6. Event Verification (Proves append-only table structure)                                                        
+                                                                                                      
+  -- ---------------------------------------------------------------------------                                       
+                                                                                                      
+  INSERT INTO public.domain_events (                                                                                   
+                                                                                                      
+    tenant_id, event_type, entity_type, entity_id, actor_id, payload                                                   
+                                                                                                      
+  )                                                                                                                    
+                                                                                                      
+  VALUES (                                                                                                             
+                                                                                                      
+    v_tenant_id, 'system.validation_run', 'tenant', v_tenant_id, v_staff_id, '{"status": "success"}'::jsonb            
+                                                                                                      
+  );                                                                                                                   
+                                                                                                      
+                                                                                                                       
+                                                                                                      
+END $$                                                                                                                 
+                                                                                                      
+Try rerunning the command with --debug to troubleshoot the error.

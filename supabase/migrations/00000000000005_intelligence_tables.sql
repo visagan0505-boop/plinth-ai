@@ -6,11 +6,8 @@
 -- 1. `staff_rate_periods`: Solves ADR 006 (Temporal Financial Modelling) by 
 --    enabling historical tracking of cost and bill rates for each staff member.
 --    Protected by a GiST exclusion constraint to prevent overlapping periods.
--- 2. `time_entries`: Establishes foundational operational telemetry for 
---    utilization, billability, and future profitability calculations.
 --
--- Note: Designed strictly as an operational record. Approval workflows, 
--- payroll calculations, and billing engines are explicitly omitted.
+-- time_entries moved to migration 009 (00000000000009_time_entries.sql)
 -- =============================================================================
 
 BEGIN;
@@ -69,55 +66,5 @@ create trigger trg_staff_rate_periods_updated_at
 create index idx_srp_tenant on public.staff_rate_periods (tenant_id);
 create index idx_srp_staff on public.staff_rate_periods (staff_id);
 create index idx_srp_staff_date on public.staff_rate_periods (staff_id, effective_from);
-
-
--- ---------------------------------------------------------------------------
--- 2. Time Intelligence Foundations
--- ---------------------------------------------------------------------------
--- OPERATIONAL TELEMETRY INFRASTRUCTURE:
--- Pure operational telemetry log. Records who worked on what, when, and for 
--- how long. By explicitly separating this from billing/payroll state machines, 
--- the schema remains highly adaptable to future analytical (OLAP) workflows,
--- ML forecasting, and capacity planning without entanglement.
--- ---------------------------------------------------------------------------
-create table public.time_entries (
-  id          uuid        primary key default gen_random_uuid(),
-  tenant_id   uuid        not null default public.current_tenant_id(),
-  created_at  timestamptz not null default now(),
-  updated_at  timestamptz not null default now(),
-  created_by  uuid        not null,
-  updated_by  uuid,
-
-  staff_id     uuid    not null,
-  job_id       uuid    not null,
-  phase_id     uuid,              -- nullable (job-level overhead)
-  component_id uuid,              -- nullable (phase-level overhead)
-  
-  entry_date   date    not null,
-  hours        numeric(5,2) not null check (hours > 0 and hours <= 24),
-  is_billable  boolean not null default true,
-  description  text,
-
-  constraint uq_te_tid_id unique (tenant_id, id),
-  
-  -- Composite FKs preserving tenant isolation
-  constraint fk_te_staff       foreign key (tenant_id, staff_id) references public.staff(tenant_id, id) on delete restrict,
-  constraint fk_te_job         foreign key (tenant_id, job_id) references public.jobs(tenant_id, id) on delete restrict,
-  constraint fk_te_phase       foreign key (tenant_id, phase_id) references public.job_phases(tenant_id, id) on delete restrict,
-  constraint fk_te_component   foreign key (tenant_id, component_id) references public.job_components(tenant_id, id) on delete restrict,
-  constraint fk_te_created_by  foreign key (tenant_id, created_by) references public.staff(tenant_id, id) on delete restrict,
-  constraint fk_te_updated_by  foreign key (tenant_id, updated_by) references public.staff(tenant_id, id) on delete restrict
-);
-
-create trigger trg_time_entries_updated_at
-  before update on public.time_entries
-  for each row execute function public.set_updated_at();
-
--- Core analytical access patterns
-create index idx_te_tenant on public.time_entries (tenant_id);
-create index idx_te_staff_date on public.time_entries (staff_id, entry_date);
-create index idx_te_job on public.time_entries (job_id);
-create index idx_te_phase on public.time_entries (phase_id) where phase_id is not null;
-create index idx_te_entry_date on public.time_entries (tenant_id, entry_date);
 
 COMMIT;

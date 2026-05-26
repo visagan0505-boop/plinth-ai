@@ -6,7 +6,8 @@
 -- 1. Drops the 60 existing RLS policies across 15 core/lookup tables.
 -- 2. Re-creates them using the centralized `public.current_tenant_id()` function.
 -- 3. Enables RLS and creates policies for the new telemetry/infrastructure tables
---    (tenant_sequences, domain_events, staff_rate_periods, time_entries).
+--    (tenant_sequences, domain_events, staff_rate_periods).
+--    NOTE: time_entries RLS is applied in migration 009 where the table is created.
 -- 4. Exposes new tables via GRANTs.
 --
 -- POLICY NAMING CONVENTION (FROZEN):
@@ -87,12 +88,7 @@ create policy staff_rate_periods_tenant_insert on public.staff_rate_periods for 
 create policy staff_rate_periods_tenant_update on public.staff_rate_periods for update using (tenant_id = public.current_tenant_id()) with check (tenant_id = public.current_tenant_id());
 create policy staff_rate_periods_tenant_delete on public.staff_rate_periods for delete using (tenant_id = public.current_tenant_id());
 
--- time_entries
-alter table public.time_entries enable row level security;
-create policy time_entries_tenant_select on public.time_entries for select using (tenant_id = public.current_tenant_id());
-create policy time_entries_tenant_insert on public.time_entries for insert with check (tenant_id = public.current_tenant_id());
-create policy time_entries_tenant_update on public.time_entries for update using (tenant_id = public.current_tenant_id()) with check (tenant_id = public.current_tenant_id());
-create policy time_entries_tenant_delete on public.time_entries for delete using (tenant_id = public.current_tenant_id());
+-- time_entries RLS moved to migration 009 (00000000000009_time_entries.sql)
 
 -- domain_events (APPEND-ONLY)
 alter table public.domain_events enable row level security;
@@ -110,8 +106,7 @@ grant select, insert, update, delete on public.tenant_sequences to service_role;
 grant select, insert, update, delete on public.staff_rate_periods to authenticated;
 grant select, insert, update, delete on public.staff_rate_periods to service_role;
 
-grant select, insert, update, delete on public.time_entries to authenticated;
-grant select, insert, update, delete on public.time_entries to service_role;
+-- time_entries grants moved to migration 009 (00000000000009_time_entries.sql)
 
 -- domain_events only gets select and insert grants
 grant select, insert on public.domain_events to authenticated;

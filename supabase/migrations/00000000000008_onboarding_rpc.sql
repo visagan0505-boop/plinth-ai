@@ -22,7 +22,11 @@ CREATE OR REPLACE FUNCTION public.bootstrap_tenant(
   p_role text,
   p_hourly_cost_rate numeric,
   p_hourly_bill_rate numeric
-) RETURNS uuid AS $$
+) RETURNS uuid
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
 DECLARE
   v_tenant_id uuid;
   v_office_id uuid;
@@ -39,12 +43,12 @@ BEGIN
   INSERT INTO public.office_locations (tenant_id, code, name, country_code, timezone, sort_order)
   VALUES (v_tenant_id, 'MAIN', p_office_name, 'NZ', 'Pacific/Auckland', 1)
   RETURNING id INTO v_office_id;
-
+ 
   -- 3. Create Discipline
   INSERT INTO public.disciplines (tenant_id, code, name, requires_cpeng, default_hourly_rate, sort_order)
   VALUES (v_tenant_id, 'ENG', p_discipline_name, false, p_hourly_bill_rate, 1)
   RETURNING id INTO v_discipline_id;
-
+ 
   -- 4. Create Staff (Linking office, discipline, and user)
   INSERT INTO public.staff (
     tenant_id, 
@@ -69,12 +73,12 @@ BEGIN
     p_hourly_bill_rate
   )
   RETURNING id INTO v_staff_id;
-
+ 
   -- The bootstrap user has no created_by/updated_by since they are the first user.
   -- Subsequent users will have these audit fields populated.
-
+ 
   RETURN v_tenant_id;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$;
 
 COMMIT;

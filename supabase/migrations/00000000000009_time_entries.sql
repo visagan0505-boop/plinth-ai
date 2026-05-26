@@ -46,4 +46,16 @@ CREATE TRIGGER trg_time_entries_updated_at
 CREATE INDEX idx_time_entries_tenant_job ON public.time_entries(tenant_id, job_id);
 CREATE INDEX idx_time_entries_tenant_staff ON public.time_entries(tenant_id, staff_id, operational_date);
 
+-- ---------------------------------------------------------------------------
+-- RLS and GRANTs (moved from migration 006 since the table is created here)
+-- ---------------------------------------------------------------------------
+ALTER TABLE public.time_entries ENABLE ROW LEVEL SECURITY;
+CREATE POLICY time_entries_tenant_select ON public.time_entries FOR SELECT USING (tenant_id = public.current_tenant_id());
+CREATE POLICY time_entries_tenant_insert ON public.time_entries FOR INSERT WITH CHECK (tenant_id = public.current_tenant_id());
+CREATE POLICY time_entries_tenant_update ON public.time_entries FOR UPDATE USING (tenant_id = public.current_tenant_id()) WITH CHECK (tenant_id = public.current_tenant_id());
+CREATE POLICY time_entries_tenant_delete ON public.time_entries FOR DELETE USING (tenant_id = public.current_tenant_id());
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.time_entries TO authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.time_entries TO service_role;
+
 COMMIT;

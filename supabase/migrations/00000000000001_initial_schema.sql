@@ -1,13 +1,13 @@
 -- =============================================================================
--- Plinth � Initial Schema Migration
+-- Plinth — Initial Schema Migration
 -- =============================================================================
 -- This migration creates the complete foundational schema for Plinth.
 -- It concatenates the following source files in order:
---   1. schema/extensions.sql      � PostgreSQL extensions
---   2. schema/01_lookup_tables.sql � Trigger function + lookup tables
---   3. schema/02_core_tables.sql  � Core business tables
---   4. schema/03_indexes.sql      � Non-PK, non-unique indexes
---   5. schema/04_rls_policies.sql � Row Level Security policies
+--   1. schema/extensions.sql      — PostgreSQL extensions
+--   2. schema/01_lookup_tables.sql — Trigger function + lookup tables
+--   3. schema/02_core_tables.sql  — Core business tables
+--   4. schema/03_indexes.sql      — Non-PK, non-unique indexes
+--   5. schema/04_rls_policies.sql — Row Level Security policies
 --
 -- Source of truth: the individual files in schema/. This migration is a
 -- concatenated copy for the Supabase CLI migration runner.
@@ -19,7 +19,7 @@
 -- =========================================================================
 
 -- =============================================================================
--- Plinth — Required PostgreSQL Extensions
+-- Plinth â€” Required PostgreSQL Extensions
 -- =============================================================================
 -- citext: case-insensitive text type, used for email columns
 -- pgcrypto: provides gen_random_uuid() on PostgreSQL < 13. Included for
@@ -35,7 +35,7 @@ create extension if not exists pgcrypto;
 -- =========================================================================
 
 -- =============================================================================
--- Plinth — Lookup Tables
+-- Plinth â€” Lookup Tables
 -- =============================================================================
 -- These tables define reference data that may evolve per tenant. They are
 -- created before core tables because core tables hold foreign keys to them.
@@ -56,7 +56,7 @@ create extension if not exists pgcrypto;
 -- Reusable trigger function: auto-update updated_at on every UPDATE
 -- ---------------------------------------------------------------------------
 -- Attached to every table via a BEFORE UPDATE trigger. Do NOT rely on
--- DEFAULT now() for updates — defaults only fire on INSERT.
+-- DEFAULT now() for updates â€” defaults only fire on INSERT.
 -- ---------------------------------------------------------------------------
 create or replace function public.set_updated_at()
 returns trigger as $$
@@ -83,7 +83,7 @@ create table public.tenants (
   tenant_id   uuid        not null default '00000000-0000-0000-0000-000000000001'::uuid,
   created_at  timestamptz not null default now(),
   updated_at  timestamptz not null default now(),
-  -- No created_by / updated_by — tenants are created by system admin
+  -- No created_by / updated_by â€” tenants are created by system admin
   name          text    not null,
   slug          text    not null unique,
   country_code  text    not null check (country_code in ('NZ', 'AU', 'UK')),
@@ -262,14 +262,14 @@ create trigger trg_office_locations_updated_at
 -- =========================================================================
 
 -- =============================================================================
--- Plinth — Core Business Tables
+-- Plinth â€” Core Business Tables
 -- =============================================================================
 -- These tables model the operational domain: people, clients, and jobs.
--- Creation order matters — each table's foreign keys must resolve against
+-- Creation order matters â€” each table's foreign keys must resolve against
 -- tables defined earlier in this file or in 01_lookup_tables.sql.
 --
--- Order: staff → clients → client_contacts → jobs → job_offices →
---        job_disciplines → job_phases → job_scopes → job_components
+-- Order: staff â†’ clients â†’ client_contacts â†’ jobs â†’ job_offices â†’
+--        job_disciplines â†’ job_phases â†’ job_scopes â†’ job_components
 --
 -- AUDIT COLUMNS: Every business table carries created_by and updated_by
 -- referencing staff(id). These are nullable ONLY for the bootstrap row
@@ -350,7 +350,7 @@ create trigger trg_staff_updated_at
 -- clients
 -- ---------------------------------------------------------------------------
 -- Organisations that commission structural engineering work. Name is not
--- unique — the same organisation name may appear under different tenants.
+-- unique â€” the same organisation name may appear under different tenants.
 -- ---------------------------------------------------------------------------
 create table public.clients (
   id          uuid        primary key default gen_random_uuid(),
@@ -440,7 +440,7 @@ $$ language plpgsql;
 -- engagement to provide structural engineering services.
 --
 -- job_number format: '2026-0001'. Generation is handled by application code
--- or a future database function — not by a DEFAULT expression.
+-- or a future database function â€” not by a DEFAULT expression.
 --
 -- RISK RULE: When fee_value > project_risk_value, the application must
 -- prompt the user for confirmation before saving. This is NOT enforced as
@@ -508,7 +508,7 @@ create trigger trg_jobs_default_status
 -- No created_by / updated_by: junction rows are not independently audited.
 -- ---------------------------------------------------------------------------
 create table public.job_offices (
-  -- No surrogate id — composite PK
+  -- No surrogate id â€” composite PK
   job_id             uuid not null references public.jobs(id) on delete cascade,
   office_location_id uuid not null references public.office_locations(id) on delete cascade,
   -- MULTI-TENANT: Remove this default before multi-tenant launch
@@ -535,7 +535,7 @@ create trigger trg_job_offices_updated_at
 -- No created_by / updated_by: junction rows are not independently audited.
 -- ---------------------------------------------------------------------------
 create table public.job_disciplines (
-  -- No surrogate id — composite PK
+  -- No surrogate id â€” composite PK
   job_id        uuid not null references public.jobs(id) on delete cascade,
   discipline_id uuid not null references public.disciplines(id) on delete cascade,
   -- MULTI-TENANT: Remove this default before multi-tenant launch
@@ -554,8 +554,8 @@ create trigger trg_job_disciplines_updated_at
 -- ---------------------------------------------------------------------------
 -- job_phases
 -- ---------------------------------------------------------------------------
--- Breaks a job into sequential phases of work (Concept → Developed Design →
--- Detailed Design → Construction → Closeout). Each phase has its own fee
+-- Breaks a job into sequential phases of work (Concept â†’ Developed Design â†’
+-- Detailed Design â†’ Construction â†’ Closeout). Each phase has its own fee
 -- allocation and hour estimate.
 --
 -- NOTE: actual_hours and variance_hours are NOT modelled here. They belong
@@ -652,10 +652,10 @@ create trigger trg_job_components_updated_at
 -- =========================================================================
 
 -- =============================================================================
--- Plinth — Indexes
+-- Plinth â€” Indexes
 -- =============================================================================
 -- Non-PK, non-unique-constraint indexes. PostgreSQL does NOT auto-create
--- indexes on foreign key columns — every FK needs an explicit index for
+-- indexes on foreign key columns â€” every FK needs an explicit index for
 -- efficient joins and cascading deletes.
 --
 -- Indexes are grouped by table, with a comment on each explaining the
@@ -676,10 +676,10 @@ create index idx_staff_primary_office on public.staff (primary_office_id);
 -- FK index: look up staff by manager (e.g. "direct reports for manager X")
 create index idx_staff_manager on public.staff (manager_id);
 
--- FK index: audit trail — who created this staff record
+-- FK index: audit trail â€” who created this staff record
 create index idx_staff_created_by on public.staff (created_by);
 
--- FK index: audit trail — who last updated this staff record
+-- FK index: audit trail â€” who last updated this staff record
 create index idx_staff_updated_by on public.staff (updated_by);
 
 -- Login lookup: find staff by email without knowing tenant_id.
@@ -834,15 +834,15 @@ create index idx_job_components_updated_by on public.job_components (updated_by)
 -- =========================================================================
 
 -- =============================================================================
--- Plinth — Row Level Security Policies
+-- Plinth â€” Row Level Security Policies
 -- =============================================================================
 -- TENANT ISOLATION via RLS
 --
 -- Every table has RLS enabled with four named policies:
---   {table}_tenant_select  — SELECT
---   {table}_tenant_insert  — INSERT (WITH CHECK)
---   {table}_tenant_update  — UPDATE (USING + WITH CHECK)
---   {table}_tenant_delete  — DELETE (USING)
+--   {table}_tenant_select  â€” SELECT
+--   {table}_tenant_insert  â€” INSERT (WITH CHECK)
+--   {table}_tenant_update  â€” UPDATE (USING + WITH CHECK)
+--   {table}_tenant_delete  â€” DELETE (USING)
 --
 -- POLICY EXPRESSION (same for all):
 --   tenant_id = coalesce(

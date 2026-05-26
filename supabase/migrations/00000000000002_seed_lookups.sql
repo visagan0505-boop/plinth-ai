@@ -1,5 +1,5 @@
 -- =============================================================================
--- Plinth � Seed Lookup Data Migration
+-- Plinth — Seed Lookup Data Migration
 -- =============================================================================
 -- Seeds the bootstrap tenant and all lookup table data.
 -- Source of truth: schema/05_seed_data.sql
@@ -11,7 +11,7 @@
 -- =========================================================================
 
 -- =============================================================================
--- Plinth — Seed Data (Lookup Tables)
+-- Plinth â€” Seed Data (Lookup Tables)
 -- =============================================================================
 -- Idempotent: uses ON CONFLICT ... DO NOTHING so this file can be re-run
 -- safely without duplicating data.
@@ -19,7 +19,7 @@
 -- All lookup rows are created under the bootstrap tenant
 -- ('00000000-0000-0000-0000-000000000001'). When onboarding new tenants in
 -- the multi-tenant phase, a seed_lookups_for_new_tenant() function must
--- copy these rows — see ADR 001.
+-- copy these rows â€” see ADR 001.
 -- =============================================================================
 
 -- Bootstrap tenant UUID for readability
@@ -27,7 +27,7 @@ do $$ begin perform set_config('app.bootstrap_tenant', '00000000-0000-0000-0000-
 
 
 -- ---------------------------------------------------------------------------
--- tenants — bootstrap tenant
+-- tenants â€” bootstrap tenant
 -- ---------------------------------------------------------------------------
 insert into public.tenants (id, tenant_id, name, slug, country_code, timezone, currency_code)
 values (
@@ -73,10 +73,10 @@ on conflict (tenant_id, code) do nothing;
 -- Tier A = highest risk/value, Tier D = lowest.
 -- ---------------------------------------------------------------------------
 insert into public.risk_tiers (tenant_id, code, name, description, min_fee_value, max_fee_value, requires_director_signoff, requires_peer_review, requires_pi_insurance_check, sort_order) values
-  ('00000000-0000-0000-0000-000000000001'::uuid, 'A', 'Tier A — Major Projects',    'High-value and high-risk projects requiring full governance',          500000.01, null,      true,  true,  true,  1),
-  ('00000000-0000-0000-0000-000000000001'::uuid, 'B', 'Tier B — Large Commercial',  'Significant projects requiring director oversight and peer review',    100000.01, 500000.00, true,  true,  false, 2),
-  ('00000000-0000-0000-0000-000000000001'::uuid, 'C', 'Tier C — Medium Projects',   'Mid-range projects requiring peer review',                             20000.01, 100000.00, false, true,  false, 3),
-  ('00000000-0000-0000-0000-000000000001'::uuid, 'D', 'Tier D — Small Residential', 'Low-complexity residential work with standard sign-off',                   0.01,  20000.00, false, false, false, 4)
+  ('00000000-0000-0000-0000-000000000001'::uuid, 'A', 'Tier A â€” Major Projects',    'High-value and high-risk projects requiring full governance',          500000.01, null,      true,  true,  true,  1),
+  ('00000000-0000-0000-0000-000000000001'::uuid, 'B', 'Tier B â€” Large Commercial',  'Significant projects requiring director oversight and peer review',    100000.01, 500000.00, true,  true,  false, 2),
+  ('00000000-0000-0000-0000-000000000001'::uuid, 'C', 'Tier C â€” Medium Projects',   'Mid-range projects requiring peer review',                             20000.01, 100000.00, false, true,  false, 3),
+  ('00000000-0000-0000-0000-000000000001'::uuid, 'D', 'Tier D â€” Small Residential', 'Low-complexity residential work with standard sign-off',                   0.01,  20000.00, false, false, false, 4)
 on conflict (tenant_id, code) do nothing;
 
 
