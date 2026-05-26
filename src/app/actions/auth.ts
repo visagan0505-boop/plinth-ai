@@ -6,11 +6,19 @@ export async function loginAction(email: string) {
   try {
     const supabase = await createClient();
     
-    // Send standard passwordless OTP link to email (highly secure, production-grade magic link)
+    // Determine site URL dynamically from environment (Vercel uses NEXT_PUBLIC_VERCEL_URL)
+    let siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+    if (!siteUrl && process.env.NEXT_PUBLIC_VERCEL_URL) {
+      siteUrl = `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`;
+    }
+    if (!siteUrl) {
+      siteUrl = 'http://localhost:3000';
+    }
+
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/auth/callback`,
+        emailRedirectTo: `${siteUrl}/api/auth/callback`,
       },
     });
 
