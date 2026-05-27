@@ -101,9 +101,9 @@ export default function JobForm({ initialData, lookups }: JobFormProps) {
         if (res.error === 'ValidationFailed') {
           const firstErr = res.details?.issues?.[0];
           if (firstErr) {
-            setErrorMsg(`${firstErr.path?.join('.')} : ${firstErr.message}`);
+            setErrorMsg(firstErr.message);
           } else {
-            setErrorMsg(`Validation failed: ${JSON.stringify(res.details)}`);
+            setErrorMsg(`Validation failed: Please check all required fields.`);
           }
         } else {
           setErrorMsg(res.message);
