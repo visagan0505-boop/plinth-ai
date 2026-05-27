@@ -66,9 +66,9 @@ export function TimeEntryManager({ initialEntries, jobs }: { initialEntries: any
                 <span className="font-mono text-sm font-bold text-slate-600">{totalHours.toFixed(2)}h total</span>
               </div>
               <div className="bg-white border border-slate-200 rounded-lg shadow-sm overflow-hidden divide-y divide-slate-100">
-                {dayEntries.map(entry => (
+                {dayEntries.map((entry: any) => (
                   <TimeEntryRow key={entry.id} entry={entry} jobs={jobs} onUpdate={(updated) => {
-                    setEntries(prev => prev.map(e => e.id === updated.id ? updated : e));
+                    setEntries(prev => prev.map((e: any) => e.id === updated.id ? updated : e));
                   }} />
                 ))}
               </div>
