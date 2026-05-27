@@ -21,3 +21,5 @@ export const UpdateTimeEntrySchema = CreateTimeEntrySchema.partial().extend({
 });
 
 export type UpdateTimeEntryDTO = z.infer<typeof UpdateTimeEntrySchema>;
+
+export type TimeEntryStatus = 'DRAFT' | 'SUBMITTED' | 'APPROVED' | 'LOCKED';
