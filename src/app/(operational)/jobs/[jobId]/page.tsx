@@ -23,9 +23,9 @@ export default async function JobDetailPage({ params }: PageProps) {
       job_statuses ( id, name, code, description ),
       job_types ( id, name, description ),
       risk_tiers ( id, name, code, description, min_fee_value, max_fee_value, requires_director_signoff, requires_peer_review, requires_pi_insurance_check ),
-      director:staff!project_director_id ( id, full_name, email ),
-      manager:staff!design_manager_id ( id, full_name, email ),
-      primary_office:office_locations!primary_office_id ( id, name, code, timezone )
+      director:staff!fk_jobs_pd ( id, full_name, email ),
+      manager:staff!fk_jobs_dm ( id, full_name, email ),
+      primary_office:office_locations!fk_jobs_office ( id, name, code, timezone )
     `)
     .eq('id', jobId)
     .eq('tenant_id', context.tenantId)

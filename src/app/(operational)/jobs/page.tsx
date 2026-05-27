@@ -41,7 +41,7 @@ export default async function JobsPage({ searchParams }: PageProps) {
       clients ( name ),
       job_statuses ( id, name, code ),
       job_types ( name ),
-      director:staff!project_director_id ( full_name )
+      director:staff!fk_jobs_pd ( full_name )
     `)
     .eq('tenant_id', context.tenantId);
 
