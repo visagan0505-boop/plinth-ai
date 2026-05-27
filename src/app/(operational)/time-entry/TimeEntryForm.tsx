@@ -75,7 +75,7 @@ export function TimeEntryForm({ jobs, onSave, existingEntry, onCancel }: { jobs:
       if (res.success) {
         onSave(res.data);
       } else {
-        throw new Error(res.message || 'Validation Failed');
+        throw new Error((res as any).message || (res as any).error || 'Validation Failed');
       }
     } catch (err: any) {
       setError(err.message);
