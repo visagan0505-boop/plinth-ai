@@ -18,7 +18,7 @@ export async function createComponentAction(formData: CreateComponentDTO): Promi
     const context = await getOperationalContext();
     const db = await createClient();
 
-    const data = await createComponent(db, parsed.data, context.tenantId, context.staffId);
+    const data = await createComponent(db, parsed.data, context.tenantId, context.userId);
     
     return { success: true, data };
   } catch (error: any) {
@@ -37,7 +37,7 @@ export async function updateComponentAction(formData: UpdateComponentDTO): Promi
     const context = await getOperationalContext();
     const db = await createClient();
 
-    const data = await updateComponent(db, parsed.data, context.tenantId, context.staffId);
+    const data = await updateComponent(db, parsed.data, context.tenantId, context.userId);
     
     return { success: true, data };
   } catch (error: any) {

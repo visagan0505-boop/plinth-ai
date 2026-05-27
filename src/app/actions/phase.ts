@@ -18,7 +18,7 @@ export async function createPhaseAction(formData: CreatePhaseDTO): Promise<Actio
     const context = await getOperationalContext();
     const db = await createClient();
 
-    const data = await createPhase(db, parsed.data, context.tenantId, context.staffId);
+    const data = await createPhase(db, parsed.data, context.tenantId, context.userId);
     
     revalidatePath(`/jobs/${data.job_id}`);
     return { success: true, data };
@@ -38,7 +38,7 @@ export async function updatePhaseAction(formData: UpdatePhaseDTO): Promise<Actio
     const context = await getOperationalContext();
     const db = await createClient();
 
-    const data = await updatePhase(db, parsed.data, context.tenantId, context.staffId);
+    const data = await updatePhase(db, parsed.data, context.tenantId, context.userId);
     
     revalidatePath(`/jobs/${data.job_id}`);
     return { success: true, data };

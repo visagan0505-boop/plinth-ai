@@ -18,7 +18,7 @@ export async function createScopeAction(formData: CreateScopeDTO): Promise<Actio
     const context = await getOperationalContext();
     const db = await createClient();
 
-    const data = await createScope(db, parsed.data, context.tenantId, context.staffId);
+    const data = await createScope(db, parsed.data, context.tenantId, context.userId);
     
     return { success: true, data };
   } catch (error: any) {
@@ -37,7 +37,7 @@ export async function updateScopeAction(formData: UpdateScopeDTO): Promise<Actio
     const context = await getOperationalContext();
     const db = await createClient();
 
-    const data = await updateScope(db, parsed.data, context.tenantId, context.staffId);
+    const data = await updateScope(db, parsed.data, context.tenantId, context.userId);
     
     return { success: true, data };
   } catch (error: any) {

@@ -17,7 +17,7 @@ export async function createTimeEntryAction(formData: CreateTimeEntryDTO): Promi
     const context = await getOperationalContext();
     const db = await createClient();
 
-    const data = await createTimeEntry(db, parsed.data, context.tenantId, context.staffId);
+    const data = await createTimeEntry(db, parsed.data, context.tenantId, context.userId);
     
     return { success: true, data };
   } catch (error: any) {
@@ -36,7 +36,7 @@ export async function updateTimeEntryAction(formData: UpdateTimeEntryDTO): Promi
     const context = await getOperationalContext();
     const db = await createClient();
 
-    const data = await updateTimeEntry(db, parsed.data, context.tenantId, context.staffId);
+    const data = await updateTimeEntry(db, parsed.data, context.tenantId, context.userId);
     
     return { success: true, data };
   } catch (error: any) {

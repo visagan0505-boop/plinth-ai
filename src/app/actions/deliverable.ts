@@ -13,7 +13,7 @@ export async function createDeliverableAction(formData: any) {
 
     const context = await getOperationalContext();
     const db = await createClient();
-    const data = await createDeliverable(db, parsed.data, context.tenantId, context.staffId);
+    const data = await createDeliverable(db, parsed.data, context.tenantId, context.userId);
     return { success: true, data };
   } catch (error: any) {
     return { success: false, error: 'DatabaseError', message: error.message };
@@ -27,7 +27,7 @@ export async function createRevisionAction(formData: any) {
 
     const context = await getOperationalContext();
     const db = await createClient();
-    const data = await createRevision(db, parsed.data, context.tenantId, context.staffId);
+    const data = await createRevision(db, parsed.data, context.tenantId, context.userId);
     return { success: true, data };
   } catch (error: any) {
     return { success: false, error: 'DatabaseError', message: error.message };
@@ -41,7 +41,7 @@ export async function updateRevisionAction(formData: any) {
 
     const context = await getOperationalContext();
     const db = await createClient();
-    const data = await updateRevision(db, parsed.data, context.tenantId, context.staffId);
+    const data = await updateRevision(db, parsed.data, context.tenantId, context.userId);
     return { success: true, data };
   } catch (error: any) {
     return { success: false, error: 'DatabaseError', message: error.message };
@@ -55,7 +55,7 @@ export async function issueTransmittalAction(formData: any) {
 
     const context = await getOperationalContext();
     const db = await createClient();
-    const data = await issueTransmittal(db, parsed.data, context.tenantId, context.staffId);
+    const data = await issueTransmittal(db, parsed.data, context.tenantId, context.userId);
     return { success: true, data };
   } catch (error: any) {
     return { success: false, error: 'DatabaseError', message: error.message };
