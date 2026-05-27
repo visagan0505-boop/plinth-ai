@@ -9,7 +9,7 @@ export const CreateDeliverableSchema = z.object({
   deliverableCode: z.string().min(1, "Deliverable code is required"),
   name: z.string().min(1, "Name is required"),
   type: z.enum(['Drawing', 'Calculation', 'Specification', 'Report', 'Other']),
-  metadata: z.record(z.any()).optional().nullable(),
+  metadata: z.record(z.string(), z.any()).optional().nullable(),
 });
 export type CreateDeliverableDTO = z.infer<typeof CreateDeliverableSchema>;
 
