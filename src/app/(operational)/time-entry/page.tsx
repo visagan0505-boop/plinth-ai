@@ -8,7 +8,7 @@ export default async function TimeEntryPage() {
   const db = await createClient();
 
   // Fetch recent time entries for the user
-  const entries = await listTimeEntries(db, context.tenantId, { staffId: context.staffId });
+  const entries = await listTimeEntries(db, context.tenantId, { staffId: context.userId });
 
   // Fetch all jobs and their operational hierarchy to power the dependent dropdowns
   const { data: jobs, error } = await (db as any)
