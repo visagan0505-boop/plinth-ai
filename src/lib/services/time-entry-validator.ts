@@ -8,7 +8,7 @@ export async function validateTimeEntryWorkflowIntegrity() {
     const db = await createClient();
     
     // Test the Read query which exercises RLS
-    const entries = await listTimeEntries(db, context.tenantId, context.userId);
+    const entries = await listTimeEntries(db, context.tenantId, { staffId: context.userId });
     
     if (!Array.isArray(entries)) {
       return { isHealthy: false, message: 'listTimeEntries did not return an array' };
