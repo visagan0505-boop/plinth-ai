@@ -57,7 +57,7 @@ export function TimeEntryManager({ initialEntries, jobs }: { initialEntries: any
       <div className="space-y-8">
         {sortedDates.map(date => {
           const dayEntries = groupedEntries[date];
-          const totalHours = dayEntries.reduce((sum, e) => sum + Number(e.hours), 0);
+          const totalHours = dayEntries.reduce((sum: number, e: any) => sum + Number(e.hours), 0);
           
           return (
             <div key={date} className="space-y-3">
