@@ -18,7 +18,7 @@ import { revalidatePath } from 'next/cache';
 
 export type ActionResponse<T> = 
   | { success: true; data: T }
-  | { success: false; error: 'ValidationFailed'; details: z.ZodError }
+  | { success: false; error: 'ValidationFailed'; details: { issues: z.ZodIssue[] } }
   | { success: false; error: 'DatabaseError'; message: string };
 
 export async function createJobAction(
@@ -30,7 +30,7 @@ export async function createJobAction(
 
     const parsed = CreateJobSchema.safeParse(formData);
     if (!parsed.success) {
-      return { success: false, error: 'ValidationFailed', details: parsed.error };
+      return { success: false, error: 'ValidationFailed', details: { issues: parsed.error.issues } };
     }
 
     const data = await createJob(db, parsed.data, context.tenantId, context.userId);
@@ -50,7 +50,7 @@ export async function updateJobAction(
 
     const parsed = UpdateJobSchema.safeParse(formData);
     if (!parsed.success) {
-      return { success: false, error: 'ValidationFailed', details: parsed.error };
+      return { success: false, error: 'ValidationFailed', details: { issues: parsed.error.issues } };
     }
 
     const data = await updateJob(db, parsed.data, context.tenantId, context.userId);

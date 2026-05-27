@@ -99,8 +99,12 @@ export default function JobForm({ initialData, lookups }: JobFormProps) {
         router.refresh();
       } else {
         if (res.error === 'ValidationFailed') {
-          const firstErr = res.details.issues[0];
-          setErrorMsg(`${firstErr.path.join('.')}: ${firstErr.message}`);
+          const firstErr = res.details?.issues?.[0];
+          if (firstErr) {
+            setErrorMsg(`${firstErr.path?.join('.')} : ${firstErr.message}`);
+          } else {
+            setErrorMsg(`Validation failed: ${JSON.stringify(res.details)}`);
+          }
         } else {
           setErrorMsg(res.message);
         }
