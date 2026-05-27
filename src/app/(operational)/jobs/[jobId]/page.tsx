@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server';
 import { getOperationalContext } from '@/lib/auth/session';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { JobStructureView } from './JobStructureView';
 
 interface PageProps {
   params: Promise<{
@@ -30,6 +31,19 @@ export default async function JobDetailPage({ params }: PageProps) {
     .eq('id', jobId)
     .eq('tenant_id', context.tenantId)
     .single();
+
+  const { data: phases } = await (db as any)
+    .from('job_phases')
+    .select(`
+      *,
+      job_scopes (
+        *,
+        job_components (*)
+      )
+    `)
+    .eq('job_id', jobId)
+    .eq('tenant_id', context.tenantId)
+    .order('sort_order', { ascending: true });
 
   if (error || !job) {
     console.error('Error fetching job details:', error);
@@ -266,6 +280,9 @@ export default async function JobDetailPage({ params }: PageProps) {
           </div>
         </div>
       </div>
+
+      {/* Operational Breakdown */}
+      <JobStructureView jobId={job.id} phases={phases || []} />
     </div>
   );
 }
