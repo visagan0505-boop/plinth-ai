@@ -1,39 +1,31 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 import { Database } from '@/types/supabase';
 import { CreateTimeEntryDTO, UpdateTimeEntryDTO } from '@/lib/dtos/time-entry';
-import { canMutateEntry, TIME_ENTRY_LIFECYCLE } from '@/lib/services/time-entry-lifecycle';
 import { dispatchDomainEvent } from '@/lib/services/events';
-import { getStaffById } from '@/lib/services/staff';
 
 type Db = SupabaseClient<Database>;
-// Using any as the schema isn't yet compiled with the new time_entries table
-type TimeEntryRow = any;
+type TimeEntryRow = Database['public']['Tables']['time_entries']['Row'];
 
-export async function listTimeEntries(db: Db, tenantId: string, staffId: string): Promise<TimeEntryRow[]> {
-  const { data, error } = await db
+export async function listTimeEntries(
+  db: Db,
+  tenantId: string,
+  filters?: { staffId?: string; jobId?: string; startDate?: string; endDate?: string }
+): Promise<TimeEntryRow[]> {
+  let query = db
     .from('time_entries')
     .select('*')
     .eq('tenant_id', tenantId)
-    .eq('staff_id', staffId)
     .order('operational_date', { ascending: false });
+
+  if (filters?.staffId) query = query.eq('staff_id', filters.staffId);
+  if (filters?.jobId) query = query.eq('job_id', filters.jobId);
+  if (filters?.startDate) query = query.gte('operational_date', filters.startDate);
+  if (filters?.endDate) query = query.lte('operational_date', filters.endDate);
+
+  const { data, error } = await query;
 
   if (error) {
     throw new Error(`Failed to list time entries: ${error.message}`);
-  }
-
-  return data;
-}
-
-export async function getTimeEntryById(db: Db, entryId: string, tenantId: string): Promise<TimeEntryRow> {
-  const { data, error } = await db
-    .from('time_entries')
-    .select('*')
-    .eq('id', entryId)
-    .eq('tenant_id', tenantId)
-    .single();
-
-  if (error || !data) {
-    throw new Error(`Time entry not found: ${error?.message}`);
   }
 
   return data;
@@ -45,23 +37,32 @@ export async function createTimeEntry(
   tenantId: string,
   auditorId: string
 ): Promise<TimeEntryRow> {
-  // 1. Fetch current staff rates for snapshotting
-  const staffRecord = await getStaffById(db, auditorId, tenantId);
-  const costRate = staffRecord.hourly_cost_rate || 0;
-  const billRate = staffRecord.hourly_bill_rate || 0;
+  // 1. Resolve Staff Rates to preserve profitability context
+  const { data: staff, error: staffError } = await db
+    .from('staff')
+    .select('hourly_cost_rate, hourly_bill_rate')
+    .eq('id', dto.staffId)
+    .eq('tenant_id', tenantId)
+    .single();
 
-  const payload = {
+  if (staffError || !staff) {
+    throw new Error('Failed to resolve staff rates for time entry');
+  }
+
+  const payload: any = {
     tenant_id: tenantId,
-    staff_id: auditorId,
+    staff_id: dto.staffId,
     job_id: dto.jobId,
-    job_phase_id: dto.jobPhaseId || null,
-    operational_date: dto.operationalDate,
+    job_phase_id: dto.phaseId,
+    scope_id: dto.scopeId,
+    component_id: dto.componentId || null,
+    operational_date: dto.entryDate,
     hours: dto.hours,
     notes: dto.notes || null,
-    snapshot_cost_rate: costRate,
-    snapshot_bill_rate: billRate,
     is_billable: dto.isBillable,
-    status: TIME_ENTRY_LIFECYCLE.DRAFT,
+    snapshot_cost_rate: staff.hourly_cost_rate || 0,
+    snapshot_bill_rate: staff.hourly_bill_rate || 0,
+    status: 'SUBMITTED', // Bypass approval workflows per Phase 3E rules
     created_by: auditorId,
     updated_by: auditorId,
   };
@@ -76,10 +77,12 @@ export async function createTimeEntry(
     throw new Error(`Failed to create time entry: ${error.message}`);
   }
 
-  await dispatchDomainEvent(db, tenantId, 'time_entry.created', 'time_entry', data.id, auditorId, {
+  await dispatchDomainEvent(db, tenantId, 'time_entry.created', 'time_entries', data.id, auditorId, {
+    staff_id: dto.staffId,
     job_id: dto.jobId,
     hours: dto.hours,
-    operational_date: dto.operationalDate
+    entry_date: dto.entryDate,
+    is_billable: dto.isBillable
   });
 
   return data;
@@ -91,25 +94,21 @@ export async function updateTimeEntry(
   tenantId: string,
   auditorId: string
 ): Promise<TimeEntryRow> {
-  // 1. Fetch existing entry to check lifecycle rules
-  const existing = await getTimeEntryById(db, dto.id!, tenantId);
-
-  // 2. Validate state transitions
-  if (!canMutateEntry(existing.status)) {
-    throw new Error(`Cannot mutate a time entry in ${existing.status} state.`);
-  }
-
   const payload: any = {
     updated_by: auditorId,
     updated_at: new Date().toISOString(),
   };
 
+  // Allow correction of attribution
   if (dto.jobId !== undefined) payload.job_id = dto.jobId;
-  if (dto.jobPhaseId !== undefined) payload.job_phase_id = dto.jobPhaseId;
-  if (dto.operationalDate !== undefined) payload.operational_date = dto.operationalDate;
+  if (dto.phaseId !== undefined) payload.job_phase_id = dto.phaseId;
+  if (dto.scopeId !== undefined) payload.scope_id = dto.scopeId;
+  if (dto.componentId !== undefined) payload.component_id = dto.componentId;
+  
+  if (dto.entryDate !== undefined) payload.operational_date = dto.entryDate;
   if (dto.hours !== undefined) payload.hours = dto.hours;
-  if (dto.notes !== undefined) payload.notes = dto.notes;
   if (dto.isBillable !== undefined) payload.is_billable = dto.isBillable;
+  if (dto.notes !== undefined) payload.notes = dto.notes;
 
   const { data, error } = await db
     .from('time_entries')
@@ -123,69 +122,10 @@ export async function updateTimeEntry(
     throw new Error(`Failed to update time entry: ${error.message}`);
   }
 
-  await dispatchDomainEvent(db, tenantId, 'time_entry.updated', 'time_entry', data.id, auditorId, {
-    updated_fields: Object.keys(payload).filter(k => k !== 'updated_by' && k !== 'updated_at')
+  await dispatchDomainEvent(db, tenantId, 'time_entry.updated', 'time_entries', data.id, auditorId, {
+    hours: data.hours,
+    is_billable: data.is_billable
   });
 
   return data;
-}
-
-export async function submitTimeEntries(
-  db: Db,
-  entryIds: string[],
-  tenantId: string,
-  auditorId: string
-): Promise<void> {
-  // We do not check state individually in the app layer for batch updates to avoid N+1,
-  // we let Postgres enforce it via the WHERE clause:
-  
-  const { error } = await db
-    .from('time_entries')
-    .update({
-      status: TIME_ENTRY_LIFECYCLE.SUBMITTED,
-      updated_by: auditorId,
-      updated_at: new Date().toISOString(),
-    })
-    .in('id', entryIds)
-    .eq('tenant_id', tenantId)
-    .eq('status', TIME_ENTRY_LIFECYCLE.DRAFT); // Only update drafts
-
-  if (error) {
-    throw new Error(`Failed to submit time entries: ${error.message}`);
-  }
-
-  // A domain event for batch submissions could be fired here
-  await dispatchDomainEvent(db, tenantId, 'time_entry.batch_submitted', 'time_entry_batch', auditorId, auditorId, {
-    count: entryIds.length,
-    ids: entryIds
-  });
-}
-
-export async function approveTimeEntries(
-  db: Db,
-  entryIds: string[],
-  tenantId: string,
-  approverId: string
-): Promise<void> {
-  const { error } = await db
-    .from('time_entries')
-    .update({
-      status: TIME_ENTRY_LIFECYCLE.APPROVED,
-      approved_by: approverId,
-      approved_at: new Date().toISOString(),
-      updated_by: approverId,
-      updated_at: new Date().toISOString(),
-    })
-    .in('id', entryIds)
-    .eq('tenant_id', tenantId)
-    .eq('status', TIME_ENTRY_LIFECYCLE.SUBMITTED); // Only approve submitted entries
-
-  if (error) {
-    throw new Error(`Failed to approve time entries: ${error.message}`);
-  }
-
-  await dispatchDomainEvent(db, tenantId, 'time_entry.batch_approved', 'time_entry_batch', approverId, approverId, {
-    count: entryIds.length,
-    ids: entryIds
-  });
 }
