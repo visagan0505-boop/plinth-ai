@@ -16,7 +16,7 @@ export default async function JobDetailPage({ params }: PageProps) {
   const { jobId } = await params;
 
   // Fetch job details with joined entities
-  const { data: job, error } = await (db as any)
+  const { data: job, error } = await db
     .from('jobs')
     .select(`
       *,
@@ -32,7 +32,7 @@ export default async function JobDetailPage({ params }: PageProps) {
     .eq('tenant_id', context.tenantId)
     .single();
 
-  const { data: phases } = await (db as any)
+  const { data: phases } = await db
     .from('job_phases')
     .select(`
       *,

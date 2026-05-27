@@ -16,7 +16,7 @@ export default async function JobIntelligencePage({ params }: PageProps) {
   const { jobId } = await params;
 
   // 1. Fetch Job
-  const { data: job, error: jobError } = await (db as any)
+  const { data: job, error: jobError } = await db
     .from('jobs')
     .select('id, name, job_number')
     .eq('id', jobId)
@@ -90,7 +90,7 @@ export default async function JobIntelligencePage({ params }: PageProps) {
                       ></div>
                     </div>
                     <div className="mt-2 text-xs font-semibold text-slate-500 text-right">
-                      {percentBurn.toFixed(1)}% burned ({phase.total_minutes / 60} hrs logged)
+                      {percentBurn.toFixed(1)}% burned ({phase.total_hours} hrs logged)
                     </div>
                   </div>
                 );

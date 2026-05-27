@@ -16,7 +16,7 @@ export default async function DeliverablesPage({ params }: PageProps) {
   const { jobId } = await params;
 
   // 1. Fetch Job for context
-  const { data: job, error: jobError } = await (db as any)
+  const { data: job, error: jobError } = await db
     .from('jobs')
     .select('id, name, job_number')
     .eq('id', jobId)
@@ -26,7 +26,7 @@ export default async function DeliverablesPage({ params }: PageProps) {
   if (jobError || !job) notFound();
 
   // 2. Fetch Deliverables & Revisions
-  const { data: deliverables, error: delivError } = await (db as any)
+  const { data: deliverables, error: delivError } = await db
     .from('deliverables')
     .select(`
       *,
@@ -37,7 +37,7 @@ export default async function DeliverablesPage({ params }: PageProps) {
     .order('created_at', { ascending: true });
 
   // 3. Fetch Transmittal Ledger (Issue History)
-  const { data: transmittals, error: transError } = await (db as any)
+  const { data: transmittals, error: transError } = await db
     .from('transmittals')
     .select(`
       *,

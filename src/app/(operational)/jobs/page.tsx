@@ -29,7 +29,7 @@ export default async function JobsPage({ searchParams }: PageProps) {
     .order('sort_order', { ascending: true });
 
   // 2. Query jobs with joins
-  let query = (db as any)
+  let query = db
     .from('jobs')
     .select(`
       id,

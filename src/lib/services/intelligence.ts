@@ -9,7 +9,7 @@ type Db = SupabaseClient<Database>;
 
 export async function getGlobalFinancialBurn(db: Db, tenantId: string) {
   // Returns the high-level burn metrics for all jobs
-  const { data, error } = await (db as any)
+  const { data, error } = await db
     .from('vw_job_financial_burn')
     .select('*')
     .eq('tenant_id', tenantId)
@@ -21,7 +21,7 @@ export async function getGlobalFinancialBurn(db: Db, tenantId: string) {
 
 export async function getJobPhaseFinancialBurn(db: Db, tenantId: string, jobId: string) {
   // Returns the detailed breakdown of burn by phase for a specific job
-  const { data, error } = await (db as any)
+  const { data, error } = await db
     .from('vw_phase_financial_burn')
     .select('*')
     .eq('tenant_id', tenantId)
@@ -39,7 +39,7 @@ export async function getJobPhaseFinancialBurn(db: Db, tenantId: string, jobId: 
 export async function getHighChurnDeliverables(db: Db, tenantId: string, jobId?: string) {
   // A risk indicator: Deliverables with many revisions but no ISSUED status
   // We use the JS client to derive this for now, but in production we'd use an RPC or View
-  const query = (db as any)
+  const query = db
     .from('deliverables')
     .select(`
       id, deliverable_code, name, job_id,
@@ -78,7 +78,7 @@ export async function getHighChurnDeliverables(db: Db, tenantId: string, jobId?:
 
 export async function getRecentActivityLog(db: Db, tenantId: string, limit: number = 20) {
   // Fetches recent immutable events to show active operational flow
-  const { data, error } = await (db as any)
+  const { data, error } = await db
     .from('domain_events')
     .select(`
       id, event_type, created_at,
