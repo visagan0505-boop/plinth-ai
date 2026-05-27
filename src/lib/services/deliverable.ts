@@ -10,7 +10,7 @@ type Db = SupabaseClient<Database>;
 // ----------------------------------------------------------------------------
 
 export async function listDeliverables(db: Db, tenantId: string, jobId: string) {
-  const { data, error } = await db
+  const { data, error } = await (db as any)
     .from('deliverables')
     .select(`
       *,
@@ -38,7 +38,7 @@ export async function createDeliverable(db: Db, dto: CreateDeliverableDTO, tenan
     updated_by: auditorId,
   };
 
-  const { data, error } = await db.from('deliverables').insert(payload).select().single();
+  const { data, error } = await (db as any).from('deliverables').insert(payload).select().single();
   if (error) throw new Error(`Failed to create deliverable: ${error.message}`);
 
   await dispatchDomainEvent(db, tenantId, 'deliverable.created', 'deliverables', data.id, auditorId, { deliverable_code: data.deliverable_code });
@@ -61,7 +61,7 @@ export async function createRevision(db: Db, dto: CreateRevisionDTO, tenantId: s
     updated_by: auditorId,
   };
 
-  const { data, error } = await db.from('revisions').insert(payload).select().single();
+  const { data, error } = await (db as any).from('revisions').insert(payload).select().single();
   if (error) throw new Error(`Failed to create revision: ${error.message}`);
 
   await dispatchDomainEvent(db, tenantId, 'revision.created', 'revisions', data.id, auditorId, { revision_number: data.revision_number });
@@ -77,7 +77,7 @@ export async function updateRevision(db: Db, dto: UpdateRevisionDTO, tenantId: s
   if (dto.internalNotes !== undefined) payload.internal_notes = dto.internalNotes;
   if (dto.fileUrl !== undefined) payload.file_url = dto.fileUrl;
 
-  const { data, error } = await db
+  const { data, error } = await (db as any)
     .from('revisions')
     .update(payload)
     .eq('id', dto.id)
@@ -102,7 +102,7 @@ export async function updateRevision(db: Db, dto: UpdateRevisionDTO, tenantId: s
 export async function issueTransmittal(db: Db, dto: IssueTransmittalDTO, tenantId: string, auditorId: string) {
   // Transmittals must be atomic.
   // 1. Validate all revisions belong to the job and are DRAFT
-  const { data: revs, error: revError } = await db
+  const { data: revs, error: revError } = await (db as any)
     .from('revisions')
     .select('id, status, deliverables(job_id)')
     .in('id', dto.revisionIds)
@@ -126,16 +126,16 @@ export async function issueTransmittal(db: Db, dto: IssueTransmittalDTO, tenantI
     created_by: auditorId,
   };
   
-  const { data: transmittal, error: tError } = await db.from('transmittals').insert(transmittalPayload).select().single();
+  const { data: transmittal, error: tError } = await (db as any).from('transmittals').insert(transmittalPayload).select().single();
   if (tError) throw new Error(`Failed to create transmittal: ${tError.message}`);
 
   // 3. Insert Items
   const items = dto.revisionIds.map(rid => ({ transmittal_id: transmittal.id, revision_id: rid }));
-  const { error: iError } = await db.from('transmittal_items').insert(items);
+  const { error: iError } = await (db as any).from('transmittal_items').insert(items);
   if (iError) throw new Error(`Failed to create transmittal items: ${iError.message}`);
 
   // 4. Lock Revisions (status = ISSUED)
-  const { error: uError } = await db.from('revisions')
+  const { error: uError } = await (db as any).from('revisions')
     .update({ status: 'ISSUED', updated_by: auditorId, updated_at: new Date().toISOString() })
     .in('id', dto.revisionIds)
     .eq('tenant_id', tenantId);
@@ -153,7 +153,7 @@ export async function issueTransmittal(db: Db, dto: IssueTransmittalDTO, tenantI
 
 export async function getIssueHistory(db: Db, tenantId: string, jobId: string) {
   // Derive the history by fetching transmittals -> items -> revisions -> deliverables
-  const { data, error } = await db
+  const { data, error } = await (db as any)
     .from('transmittals')
     .select(`
       id, issue_date, issue_reason, message, transmittal_number,
